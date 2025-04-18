@@ -1,10 +1,21 @@
 pipeline {
-  agent {
-    docker { image 'node:16-alpine' }
-  }
+  agent any
+
   stages {
-    stage('Test') {
+    stage('Verify Docker') {
       steps {
+        // confirm the Docker CLI & daemon are accessible
+        sh 'docker version'
+      }
+    }
+
+    stage('Run Node in Docker') {
+      agent {
+        // spin up a node:16‑alpine container for this stage
+        docker { image 'node:16-alpine' }
+      }
+      steps {
+        // run your Node command inside the container
         sh 'node --version'
       }
     }
